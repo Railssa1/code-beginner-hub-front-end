@@ -1,0 +1,104 @@
+.bg-roxo {
+  background-color: #8B6AC7;
+}
+
+.bg-branco {
+  background-color: #FFFCFC;
+}
+
+.img {
+  width: 30%;
+  height: auto;
+  max-width: 150px;
+}
+
+.bg-button {
+  background-color: #34265E;
+  color: #fff;
+  width: 60%;
+  padding: 15px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+button:hover {
+  background-color: #34265E !important;
+  color: #fff;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #34265E;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #34265E;
+  text-align: center;
+}
+
+.text {
+  color: #8B6AC7;
+  text-align: center;
+}
+
+.form-control {
+  border-color: #34265E;
+  border-radius: 10px;
+}
+
+.form-control:focus {
+  border-color: #34265E !important;
+  box-shadow: 0 0 0 0.2rem rgba(52, 38, 94, 0.25);
+}
+
+.btn-submit {
+  background-color: #8B6AC7;
+  width: 80%;
+  color: #fff;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+@media (max-width: 767px) {
+  .img {
+    width: 40%;
+    max-width: 120px;
+  }
+
+  .bg-button {
+    width: 80%;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1.5rem;
+  }
+
+  .form-group {
+    width: 90%;
+  }
+
+  .btn-submit {
+    width: 90%;
+  }
+}
+
+@media (max-width: 991px) {
+  .img {
+    width: 30%;
+  }
+
+  .bg-button {
+    width: 70%;
+  }
+
+  .btn-submit {
+    width: 75%;
+  }
+}
