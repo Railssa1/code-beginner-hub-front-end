@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { NgIf } from '@angular/common';
+import { Component } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  imports: [RouterModule]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
-  constructor() { }
+  constructor(private router: Router) {}
 
-  ngOnInit() {
+  redirecionar(tipo: string) {
+    this.router.navigate(['/cadastro-usuario'], { queryParams: { tipo } });
   }
 
 }

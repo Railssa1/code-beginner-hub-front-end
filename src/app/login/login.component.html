@@ -2,8 +2,12 @@
   <div class="col-12 col-md-8 bg-roxo min-vh-100 d-flex flex-column justify-content-center align-items-center">
     <img src="../../assets/img/logo.png" class="img mx-auto" alt="Logo CodeBeginnerHub">
 
-    <button class="btn mt-5 mx-auto bg-button">Cadastro Estudante</button>
-    <button class="btn mt-4 mx-auto bg-button">Cadastro Mentor</button>
+    <button class="btn mt-5 mx-auto bg-button" (click)="redirecionar('estudante')">
+      Cadastro Estudante
+    </button>
+    <button class="btn mt-4 mx-auto bg-button" (click)="redirecionar('mentor')">
+      Cadastro Mentor
+    </button>
   </div>
   <div class="col-12 col-md-4 bg-branco min-vh-100 d-flex flex-column justify-content-center align-items-center">
     <div>

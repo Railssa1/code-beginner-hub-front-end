@@ -1,0 +1,60 @@
+.bg-roxo {
+  background-color: #8B6AC7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.form-container {
+  width: 50%;
+  max-width: none;
+  background: #efefef;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+.form-floating label {
+  transition: all 0.3s ease-in-out;
+}
+
+.form-control:focus ~ label,
+.form-control:not(:placeholder-shown) ~ label {
+  transform: translateY(-24px);
+  font-size: 0.85rem;
+  color: #8B6AC7;
+}
+
+.btn-custom {
+  background: rgb(220,220,220);
+  color: rgb(120,120,120);
+  transition: 0.3s ease-in-out;
+}
+
+.btn-custom:hover {
+  background: #8B6AC7;
+  color: #ffffff;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-chip-list {
+  width: 100%;
+}
+
+input.mat-input-element {
+  width: 100%;
+}
+
+mat-label {
+  color: #8B6AC7;
+}
+

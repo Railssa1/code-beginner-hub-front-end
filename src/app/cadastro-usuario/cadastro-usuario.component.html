@@ -1,0 +1,93 @@
+<div class="bg-roxo">
+  <div class="form-container">
+    <h1 class="text-center mb-4">Realize seu cadastro</h1>
+    <form [formGroup]="cadastroForm" (ngSubmit)="onSubmit()">
+      <div class="form-floating mb-3">
+        <input type="input" class="form-control" formControlName="name" placeholder=" " required>
+        <label>Nome</label>
+        <div *ngIf="isInvalid('name')" class="text-danger">
+          {{ cadastroForm.get('name')?.hasError('required') ? 'O name é obrigatório.' : '' }}
+        </div>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control" formControlName="email" placeholder=" " required>
+        <label>Email</label>
+        <div *ngIf="isInvalid('email')" class="text-danger">
+          {{ cadastroForm.get('email')?.hasError('required') ? 'O email é obrigatório.' : '' }}
+          {{ cadastroForm.get('email')?.hasError('email') ? 'Insira um email válido.' : '' }}
+        </div>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" formControlName="password" placeholder=" " required>
+        <label>Senha</label>
+        <div *ngIf="isInvalid('password')" class="text-danger">
+          {{ cadastroForm.get('password')?.hasError('required') ? 'A senha é obrigatória.' : '' }}
+          {{ cadastroForm.get('password')?.hasError('minlength') ? 'A senha deve ter no mínimo 6 caracteres.' : '' }}
+        </div>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" formControlName="confirmPassword" placeholder=" " required>
+        <label>Confirme sua senha</label>
+        <div *ngIf="isInvalid('confirmPassword')" class="text-danger">
+          {{ cadastroForm.get('confirmPassword')?.hasError('required') ? 'A confirmação de senha é obrigatória.' : '' }}
+        </div>
+        <div *ngIf="cadastroForm.hasError('passwordsMismatch')" class="text-danger">
+          As senhas não coincidem.
+        </div>
+      </div>
+
+      <div class="form-floating mb-3" *ngIf="tipoUsuario === 'mentor'">
+        <select class="form-control" formControlName="seniority" required>
+          <option value="" disabled selected>Selecione o nível de senioridade</option>
+          <option value="junior">Júnior</option>
+          <option value="pleno">Pleno</option>
+          <option value="senior">Sênior</option>
+        </select>
+        <label>Nível de Senioridade</label>
+        <div *ngIf="isInvalid('seniority')" class="text-danger">
+          O nível de senioridade é obrigatório.
+        </div>
+      </div>
+
+      <div *ngIf="tipoUsuario === 'mentor'" class="m-3">
+        <mat-form-field class="chip-list">
+          <mat-label>Selecione ou digite uma nova habilidade</mat-label>
+          <mat-chip-grid #chipGrid aria-label="Habilidades">
+            @for (skill of skills(); track skill) {
+              <mat-chip-row (removed)="remove(skill)">
+                {{skill}}
+                <button matChipRemove [attr.aria-label]="'Remover ' + skill">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+            }
+          </mat-chip-grid>
+          <input
+            class="m-2"
+            name="currentSkill"
+            placeholder="Nova habilidade"
+            #skillInput
+            [matChipInputFor]="chipGrid"
+            [matAutocomplete]="auto"
+            (matChipInputTokenEnd)="add($event)"
+            formControlName="skills"
+            required
+          />
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event); skillInput.value = ''">
+            @for (fruit of filteredSkills(); track fruit) {
+              <mat-option [value]="fruit">{{fruit}}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+        <div *ngIf="isInvalid('habilidades')" class="text-danger">
+          É necessário preencher no mínimo uma habilidade.
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-custom w-100" [disabled]="cadastroForm.invalid">Cadastrar</button>
+    </form>
+  </div>
+</div>
