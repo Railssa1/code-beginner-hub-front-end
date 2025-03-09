@@ -1,0 +1,64 @@
+<div class="container">
+  <header class="header">
+    <div class="search-container">
+      <input type="text" class="search-bar" placeholder="Busque por tópicos">
+    </div>
+    <div class="icons">
+      <button type="submit" class="btn full-width">
+        <img src="assets/img/Sino.png" alt="Sino" width="20" height="20">
+      </button>
+      <button type="submit" class="btn full-width">
+        <img src="assets/img/Icon.png" alt="Icon" width="20" height="20">
+      </button>
+    </div>
+  </header>
+
+  <nav class="nav-bar">
+    <a href="#" style="color: #34265E">Tópicos</a>
+    <a href="#" style="color: #34265E">Tópicos Concluídos</a>
+    <a href="#" style="color: #34265E">Entre em contato</a>
+  </nav>
+
+  <main class="content">
+    <section class="mentor-profile">
+      <div class="profile-pic">
+        <img src="assets/img/Icone Perfil.png" alt="Perfil" width="100" height="100">
+      </div>
+      <p class="mentor-name" style="color: #34265E">Nome do Mentor</p>
+      <p class="mentor-username" style="color: #34265E">Username</p>
+      <button class="btn">Visualizar tópicos respondidos</button>
+    </section>
+
+    <section class="contact-form">
+      <form>
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email">
+        </div>
+        <div class="form-group">
+          <label>Nome</label>
+          <input type="text">
+        </div>
+        <div class="form-group">
+          <label>Nível de senioridade</label>
+          <select class="form-control">
+            <option value="" disabled selected>Selecione o nível de senioridade</option>
+            <option value="junior">Júnior</option>
+            <option value="pleno">Pleno</option>
+            <option value="senior">Sênior</option>
+          </select>
+          <div *ngIf="tipoUsuario === 'mentor' && isInvalid('seniority')" class="text-danger">
+            O nível de senioridade é obrigatório.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Habilidades</label>
+          <input type="tel">
+        </div>
+        
+        <button type="submit" class="btn full-width">Salvar</button>
+      </form>
+    </section>
+  </main>
+</div>
