@@ -6,7 +6,7 @@
         <input type="input" class="form-control" formControlName="name" placeholder=" " required>
         <label>Nome</label>
         <div *ngIf="isInvalid('name')" class="text-danger">
-          {{ cadastroForm.get('name')?.hasError('required') ? 'O name é obrigatório.' : '' }}
+          {{ cadastroForm.get('name')?.hasError('required') ? 'O nome é obrigatório.' : '' }}
         </div>
       </div>
 
@@ -47,7 +47,7 @@
           <option value="senior">Sênior</option>
         </select>
         <label>Nível de Senioridade</label>
-        <div *ngIf="isInvalid('seniority')" class="text-danger">
+        <div *ngIf="tipoUsuario === 'mentor' && isInvalid('seniority')" class="text-danger">
           O nível de senioridade é obrigatório.
         </div>
       </div>
@@ -82,7 +82,7 @@
             }
           </mat-autocomplete>
         </mat-form-field>
-        <div *ngIf="isInvalid('habilidades')" class="text-danger">
+        <div *ngIf="tipoUsuario === 'mentor' && isInvalid('skills')" class="text-danger">
           É necessário preencher no mínimo uma habilidade.
         </div>
       </div>

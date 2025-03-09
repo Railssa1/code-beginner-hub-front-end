@@ -1,12 +1,12 @@
 export interface UserEstudante {
-  id: number;
+  id?: number;
   email: string;
   password: string;
   name: string;
 }
 
 export interface UserMentor {
-  id: number;
+  id?: number;
   email: string;
   password: string;
   skills: string[];

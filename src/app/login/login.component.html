@@ -15,17 +15,17 @@
 
       <h2 class="subtitle">Acesse sua conta</h2>
 
-      <form>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="form-group mt-5 mb-4">
           <label for="email" class="text">Email</label>
-          <input type="email" class="form-control" id="email">
+          <input type="email" class="form-control" id="email" formControlName="email">
         </div>
         <div class="form-group mt-2 mb-2">
           <label for="senha" class="text">Senha</label>
-          <input type="password" class="form-control" id="senha">
+          <input type="password" class="form-control" id="senha" formControlName="password">
         </div>
         <a href="#" class="text">Esqueci a senha</a>
-        <button type="submit" class="btn btn-submit mt-4 mx-auto">Entrar</button>
+        <button type="submit" class="btn btn-submit mt-4 mx-auto" [disabled]="!loginForm.valid">Entrar</button>
       </form>
     </div>
   </div>
