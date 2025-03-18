@@ -23,8 +23,12 @@
         <div class="form-group mt-2 mb-2">
           <label for="senha" class="text">Senha</label>
           <input type="password" class="form-control" id="senha" formControlName="password">
+
+          <div *ngIf="errorMessage" class="text-danger">
+            <small>{{ errorMessage }}</small>
+          </div>
         </div>
-        <a href="#" class="text">Esqueci a senha</a>
+        <a class="text" (click)="esqueciSenha()">Esqueci a senha</a>
         <button type="submit" class="btn btn-submit mt-4 mx-auto" [disabled]="!loginForm.valid">Entrar</button>
       </form>
     </div>

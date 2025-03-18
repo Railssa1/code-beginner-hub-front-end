@@ -1,0 +1,16 @@
+<div class="bg-roxo">
+  <div class="form-container">
+    <h1 class="text-center mb-4">Recuperar Senha</h1>
+    <form [formGroup]="esqueciSenhaForm" (ngSubmit)="onSubmit()">
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control" formControlName="email" placeholder=" " required>
+        <label>Email</label>
+        <div *ngIf="isInvalid('email')" class="text-danger">
+          {{ esqueciSenhaForm.get('email')?.hasError('required') ? 'O email é obrigatório.' : '' }}
+          {{ esqueciSenhaForm.get('email')?.hasError('email') ? 'Insira um email válido.' : '' }}
+        </div>
+      </div>
+      <button type="submit" class="btn btn-custom w-100" [disabled]="esqueciSenhaForm.invalid">Enviar</button>
+    </form>
+  </div>
+</div>

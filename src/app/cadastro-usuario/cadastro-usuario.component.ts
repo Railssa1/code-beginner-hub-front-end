@@ -8,8 +8,9 @@ import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/ma
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CadastroUsuarioService } from '../services/cadastro-usuario.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-cadastro-usuario',
@@ -23,6 +24,8 @@ import { CadastroUsuarioService } from '../services/cadastro-usuario.service';
     FormsModule,
     ReactiveFormsModule,
     NgIf,
+    MatSnackBarModule,
+    RouterModule
   ],
   providers: [CadastroUsuarioService],
 })
@@ -44,7 +47,9 @@ export class CadastroUsuarioComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private cadastroUsuarioService: CadastroUsuarioService
+    private cadastroUsuarioService: CadastroUsuarioService,
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.tipoUsuario = this.route.snapshot.queryParams["tipo"] || '';
     this.cadastroForm = this.fb.group({
@@ -99,16 +104,53 @@ export class CadastroUsuarioComponent implements OnInit {
   private createEstudante() {
     const body: UserEstudante = this.getEstudanteFormData();
     this.cadastroUsuarioService.createEstudante(body).subscribe(
-      response => console.log(response),
-      error => console.error(error)
+      _ => {
+        this.snackBar.open('Cadastro realizado com sucesso! Faça login.', 'Fechar', {
+          duration: 20000,
+          panelClass: ['snackbar-sucesso']
+        });
+        this.router.navigate(['/login']);
+      },
+      error => {
+        if (error.status === 400) {
+          this.snackBar.open('Usuário já cadastrado!', 'Fechar', {
+            duration: 3000,
+            panelClass: ['snackbar-erro']
+          });
+        } else {
+          this.snackBar.open('Erro ao cadastrar. Tente novamente.', 'Fechar', {
+            duration: 3000,
+            panelClass: ['snackbar-erro']
+          });
+        }
+      }
     );
   }
 
   private createMentor() {
     const body: UserMentor = this.getMentorFormData();
     this.cadastroUsuarioService.createMentor(body).subscribe(
-      response => console.log(response),
-      error => console.error(error)
+      _ => {
+        this.snackBar.open('Cadastro de mentor realizado com sucesso! Faça login.', 'Fechar', {
+          duration: 20000,
+          panelClass: ['snackbar-sucesso']
+        });
+        this.router.navigate(['/login']);
+      },
+      error => {
+        if (error.status === 400) {
+          this.snackBar.open('Usuário já cadastrado!', 'Fechar', {
+            duration: 3000,
+            panelClass: ['snackbar-erro'],
+
+          });
+        } else {
+          this.snackBar.open('Erro ao cadastrar. Tente novamente.', 'Fechar', {
+            duration: 3000,
+            panelClass: ['snackbar-erro']
+          });
+        }
+      }
     );
   }
 

@@ -41,19 +41,3 @@
   background: #8B6AC7;
   color: #ffffff;
 }
-
-mat-form-field {
-  width: 100%;
-}
-
-mat-chip-list {
-  width: 100%;
-}
-
-input.mat-input-element {
-  width: 100%;
-}
-
-mat-label {
-  color: #8B6AC7;
-}

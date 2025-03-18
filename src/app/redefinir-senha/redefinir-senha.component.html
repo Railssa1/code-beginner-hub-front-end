@@ -1,0 +1,26 @@
+<div class="bg-roxo">
+  <div class="form-container">
+    <h1 class="text-center mb-4">Redefinir Senha</h1>
+    <form [formGroup]="redefinirSenhaForm" (ngSubmit)="onSubmit()">
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" formControlName="newPassword" placeholder=" " required>
+        <label>Nova Senha</label>
+        <div *ngIf="isInvalid('newPassword')" class="text-danger">
+          {{ redefinirSenhaForm.get('newPassword')?.hasError('required') ? 'A senha é obrigatória.' : '' }}
+          {{ redefinirSenhaForm.get('newPassword')?.hasError('minlength') ? 'A senha deve ter no mínimo 6 caracteres.' : '' }}
+        </div>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" formControlName="confirmPassword" placeholder=" " required>
+        <label>Confirme sua senha</label>
+        <div *ngIf="isInvalid('confirmPassword')" class="text-danger">
+          {{ redefinirSenhaForm.get('confirmPassword')?.hasError('required') ? 'A confirmação de senha é obrigatória.' : '' }}
+        </div>
+        <div *ngIf="redefinirSenhaForm.hasError('passwordsMismatch')" class="text-danger">
+          As senhas não coincidem.
+        </div>
+      </div>
+      <button type="submit" class="btn btn-custom w-100" [disabled]="redefinirSenhaForm.invalid">Redefinir Senha</button>
+    </form>
+  </div>
+</div>

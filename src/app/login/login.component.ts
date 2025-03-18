@@ -9,10 +9,11 @@ import { Login } from '../interfaces/login.model';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [RouterModule, ReactiveFormsModule]
+  imports: [RouterModule, ReactiveFormsModule, NgIf]
 })
 export class LoginComponent {
   loginForm!: FormGroup;
+  errorMessage = "";
 
   constructor(
     private router: Router,
@@ -34,14 +35,25 @@ export class LoginComponent {
         password: this.loginForm.value.password
       }
       this.loginService.login(body).subscribe(
-        response => console.log(response),
-        error => console.error(error)
+        response => {
+          localStorage.setItem("token", response.token);
+          this.router.navigate(['/perfil-usuario']);
+          this.errorMessage = ""
+        },
+        error => {
+          this.errorMessage = error.error.error;
+          console.log(this.errorMessage)
+        }
       );
     }
   }
 
   redirecionar(tipo: string) {
     this.router.navigate(['/cadastro-usuario'], { queryParams: { tipo } });
+  }
+
+  esqueciSenha() {
+    this.router.navigate(['/esqueci-senha']);
   }
 
 }
