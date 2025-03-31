@@ -37,6 +37,7 @@ export class LoginComponent {
       this.loginService.login(body).subscribe(
         response => {
           localStorage.setItem("token", response.token);
+          localStorage.setItem("usuario", JSON.stringify(response.email));
           this.router.navigate(['/perfil-usuario']);
           this.errorMessage = ""
         },

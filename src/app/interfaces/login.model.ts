@@ -6,6 +6,7 @@ export interface Login {
 export interface LoginResponse {
   message: string;
   token: string;
+  email: string;
 }
 
 export interface EsqueciSenha {

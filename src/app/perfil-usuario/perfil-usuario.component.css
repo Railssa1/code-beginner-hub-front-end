@@ -37,8 +37,14 @@
 }
 
 .mentor-name {
+  color: #34265E;
   font-weight: bold;
   margin-bottom: 5px;
+}
+
+.mentor-username {
+  color: #34265E;
+  margin-bottom: 10px;
 }
 
 .btn {

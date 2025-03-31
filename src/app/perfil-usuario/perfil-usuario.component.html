@@ -1,43 +1,60 @@
-<div class="container">
+<div class="container" *ngIf="userForm">
   <main class="content">
     <section class="mentor-profile">
       <div class="profile-pic">
         <img src="assets/img/Icone Perfil.png" alt="Perfil" width="100" height="100">
       </div>
-      <p class="mentor-name" style="color: #34265E">Nome do Mentor</p>
-      <p class="mentor-username" style="color: #34265E">Username</p>
-      <button class="btn">Visualizar tópicos respondidos</button>
+      <p class="mentor-name">{{ user?.name }}</p>
+      <p class="mentor-username">{{ user?.email }}</p>
+      <button class="btn" *ngIf="isMentor(user)">Visualizar tópicos respondidos</button>
     </section>
 
     <section class="contact-form">
-      <form>
+      <form [formGroup]="userForm">
         <div class="form-group">
           <label>E-mail</label>
-          <input type="email">
+          <input type="email" formControlName="email" readonly>
         </div>
         <div class="form-group">
           <label>Nome</label>
-          <input type="text">
+          <input type="text" formControlName="name">
         </div>
-        <div class="form-group">
+        <div class="form-group" *ngIf="isMentor(user)">
           <label>Nível de senioridade</label>
-          <select class="form-control">
-            <option value="" disabled selected>Selecione o nível de senioridade</option>
+          <select class="form-control" formControlName="seniority">
             <option value="junior">Júnior</option>
             <option value="pleno">Pleno</option>
             <option value="senior">Sênior</option>
           </select>
-          <div *ngIf="tipoUsuario === 'mentor' && isInvalid('seniority')" class="text-danger">
-            O nível de senioridade é obrigatório.
-          </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" *ngIf="isMentor(user)">
           <label>Habilidades</label>
-          <input type="tel">
+          <mat-form-field class="chip-list" appearance="outline">
+            <mat-chip-grid #chipGrid aria-label="Habilidades">
+              <mat-chip-row *ngFor="let skill of skills()" (removed)="remove(skill)">
+                {{ skill }}
+                <button matChipRemove [attr.aria-label]="'Remover ' + skill">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+            </mat-chip-grid>
+            <input
+              placeholder="Adicione uma habilidade"
+              #skillInput
+              [matChipInputFor]="chipGrid"
+              [matAutocomplete]="auto"
+              (matChipInputTokenEnd)="add($event)"
+            />
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let skill of filteredSkills()" [value]="skill">
+                {{ skill }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
         </div>
-        
-        <button type="submit" class="btn full-width">Salvar</button>
+
+        <button type="button" class="btn full-width" (click)="saveUser()">Salvar</button>
       </form>
     </section>
   </main>
