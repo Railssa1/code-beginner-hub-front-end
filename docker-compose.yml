@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  mysql:
+    image: railssa/sprint1_cliente:mysql
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: meubanco
+    ports:
+      - "3306:3306"
+
+  backend:
+    image: railssa/sprint1_cliente:backend
+    container_name: backend-container
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+
+  auth-api:
+    image: railssa/sprint1_cliente:auth-api
+    container_name: auth-container
+    depends_on:
+      - mysql
+    ports:
+      - "8081:8081"
+
+  frontend:
+    image: railssa/sprint1_cliente:frontend
+    container_name: frontend-container
+    depends_on:
+      - backend
+    ports:
+      - "4200:4200"
