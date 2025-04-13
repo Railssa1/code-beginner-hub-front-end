@@ -6,6 +6,8 @@ import { AuthGuard } from './auth.guard';
 import { EsqueciSenhaComponent } from './esqueci-senha/esqueci-senha.component';
 import { RedefinirSenhaComponent } from './redefinir-senha/redefinir-senha.component';
 import { NavbarComponent } from './_components/navbar/navbar.component';
+import { TopicosComponent } from './topicos/topicos.component';
+import { CriarTopicoComponent } from './criar-topico/criar-topico.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -14,5 +16,7 @@ export const routes: Routes = [
   { path: 'esqueci-senha', component: EsqueciSenhaComponent },
   { path: 'redefinir-senha', component: RedefinirSenhaComponent },
   { path: 'perfil-usuario', component: PerfilUsuarioComponent},
+  { path: 'topicos', component: TopicosComponent},
+  { path: 'criar-topico', component: CriarTopicoComponent}
 ];
 

@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="topico-card" *ngFor="let topico of paginatedTopicos">
+      <div class="topico-info">
+        <h3>{{ topico.titulo }}</h3>
+        <p>{{ topico.descricao }}</p>
+        <span class="autor">{{ topico.autor }}</span>
+      </div>
+      <button class="btn-atender">Atender topicos</button>
+    </div>
+  
+    <div class="bottom-controls">
+      <div class="pagination">
+        <button (click)="changePage('prev')" [disabled]="currentPage === 0">Anterior</button>
+        <button (click)="changePage('next')" [disabled]="(currentPage + 1) * itemsPerPage >= topicos.length">Próximo</button>
+      </div>
+      <button class="btn-criar" (click)="onCriarTopico()">Criar Tópico</button>
+
+    </div>
+  </div>
+  
