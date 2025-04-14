@@ -1,6 +1,6 @@
+import { UserService } from './../services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
-import { UserService } from '../services/user.service';
 import { UserEstudante, UserMentor } from '../interfaces/user.model';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgFor, NgIf } from '@angular/common';
@@ -11,6 +11,7 @@ import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { model, signal, computed } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-perfil-usuario',
@@ -56,7 +57,7 @@ export class PerfilUsuarioComponent implements OnInit {
         this.user = data;
         this.initializeForm();
       },
-      (error) => {
+      () => {
         this.snackBar.open('Erro ao buscar dados do usuário', 'Fechar', {
           duration: 3000,
           panelClass: ['snackbar-erro'],
@@ -144,7 +145,7 @@ export class PerfilUsuarioComponent implements OnInit {
           });
           this.refreshUserData();
         },
-        (error) => {
+        () => {
           this.snackBar.open('Erro ao salvar os dados do usuário', 'Fechar', {
             duration: 3000,
             panelClass: ['snackbar-erro'],
@@ -160,7 +161,7 @@ export class PerfilUsuarioComponent implements OnInit {
         this.user = data;
         this.initializeForm();
       },
-      (error) => {
+      () => {
         this.snackBar.open('Erro ao atualizar os dados do usuário', 'Fechar', {
           duration: 3000,
           panelClass: ['snackbar-erro'],

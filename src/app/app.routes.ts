@@ -2,10 +2,8 @@ import { Routes } from '@angular/router';
 import { CadastroUsuarioComponent } from './cadastro-usuario/cadastro-usuario.component';
 import { LoginComponent } from './login/login.component';
 import { PerfilUsuarioComponent } from './perfil-usuario/perfil-usuario.component';
-import { AuthGuard } from './auth.guard';
 import { EsqueciSenhaComponent } from './esqueci-senha/esqueci-senha.component';
 import { RedefinirSenhaComponent } from './redefinir-senha/redefinir-senha.component';
-import { NavbarComponent } from './_components/navbar/navbar.component';
 import { TopicosComponent } from './topicos/topicos.component';
 import { CriarTopicoComponent } from './criar-topico/criar-topico.component';
 

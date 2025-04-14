@@ -1,18 +1,52 @@
 <div class="container">
-    <h2>Criar Tópico</h2>
-    
-    <form class="form-criar">
-      <div class="campo">
-        <label for="titulo">Linguagem</label>
-        <input type="text" id="titulo" name="titulo" placeholder="Ex: Java, Python, HTML..." required />
+  <h2>Criar Tópico</h2>
+
+  <form [formGroup]="topicoForm" (ngSubmit)="onSubmit()" class="form-criar">
+    <div class="campo">
+      <label for="titulo">Título</label>
+      <input type="text" id="titulo" formControlName="title" placeholder="Digite o título do tópico" required />
+      <div *ngIf="topicoForm.get('title')?.invalid && topicoForm.get('title')?.touched" class="text-danger">
+        O título é obrigatório.
       </div>
-      
-      <div class="campo">
-        <label for="descricao">Descrição</label>
-        <textarea id="descricao" name="descricao" rows="4" placeholder="Descreva seu problema..." required></textarea>
+    </div>
+
+    <div class="campo">
+      <label>Linguagens</label>
+      <mat-form-field class="chip-list" appearance="outline">
+        <mat-chip-grid #chipGrid aria-label="Linguagens">
+          <mat-chip-row *ngFor="let linguagem of linguagens()" class="chip" (removed)="removeLinguagem(linguagem)">
+            {{ linguagem }}
+            <button matChipRemove [attr.aria-label]="'Remover ' + linguagem">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        </mat-chip-grid>
+        <input
+          placeholder="Adicione uma linguagem"
+          #linguagemInput
+          [matChipInputFor]="chipGrid"
+          [matAutocomplete]="auto"
+          (matChipInputTokenEnd)="addLinguagem($event)"
+        />
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedLinguagem($event)">
+          <mat-option *ngFor="let linguagem of linguagensFiltradas()" [value]="linguagem">
+            {{ linguagem }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <div *ngIf="topicoForm.get('languages')?.invalid && topicoForm.get('languages')?.touched" class="text-danger">
+        É necessário adicionar pelo menos uma linguagem.
       </div>
-      
-      <button type="submit" class="btn-criar">Criar Tópico</button>
-    </form>
-  </div>
-  
+    </div>
+
+    <div class="campo">
+      <label for="descricao">Descrição</label>
+      <textarea id="descricao" formControlName="description" rows="4" placeholder="Descreva seu problema..." required></textarea>
+      <div *ngIf="topicoForm.get('description')?.invalid && topicoForm.get('description')?.touched" class="text-danger">
+        A descrição é obrigatória.
+      </div>
+    </div>
+
+    <button type="submit" class="btn-criar" [disabled]="topicoForm.invalid">Criar Tópico</button>
+  </form>
+</div>
