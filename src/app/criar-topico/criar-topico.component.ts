@@ -106,7 +106,7 @@ export class CriarTopicoComponent implements OnInit {
         });
         this.topicoForm.reset();
         this.linguagens.set([]);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/topicos']);
       },
       () => {
         this.snackBar.open('Erro ao criar tópico. Tente novamente.', 'Fechar', {
