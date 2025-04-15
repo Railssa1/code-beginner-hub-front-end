@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -8,7 +9,7 @@ import { EsqueciSenhaService } from '../services/esqueci-senha.service';
   selector: 'app-redefinir-senha',
   templateUrl: './redefinir-senha.component.html',
   styleUrls: ['./redefinir-senha.component.css'],
-  imports: [ReactiveFormsModule]
+  imports: [ReactiveFormsModule,CommonModule]
 })
 export class RedefinirSenhaComponent implements OnInit {
   redefinirSenhaForm!: FormGroup;
