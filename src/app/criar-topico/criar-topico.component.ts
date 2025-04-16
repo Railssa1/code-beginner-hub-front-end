@@ -52,7 +52,8 @@ export class CriarTopicoComponent implements OnInit {
       title: ['', [Validators.required]],
       description: ['', [Validators.required]],
       languages: [[], [Validators.required]],
-      linguagensInput: ['']
+      linguagensInput: [''],
+      author: ['', [Validators.required]] 
     });
   }
 

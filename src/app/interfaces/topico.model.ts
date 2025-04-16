@@ -1,4 +1,7 @@
 export interface Topic {
-  languages:   string[]
-  description: string
+  id: number;
+  title: string;
+  languages: string[];
+  description: string;
+  author?: string;
 }

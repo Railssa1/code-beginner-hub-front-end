@@ -1,42 +1,44 @@
-import { Component } from '@angular/core';
-import { NgFor } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TopicoService } from '../services/topic.service';
+import { Topic } from '../interfaces/topico.model';
 
 @Component({
   selector: 'app-topicos',
-  standalone: true,
-  imports: [NgFor],
   templateUrl: './topicos.component.html',
-  styleUrls: ['./topicos.component.css']
+  styleUrls: ['./topicos.component.css'],
+  imports: [
+    CommonModule,
+  ]
 })
-export class TopicosComponent {
-  topicos = [
-    { titulo: 'Java', descricao: 'Estou com problema em criar uma classe', autor: 'adrilucy' },
-    { titulo: 'Python', descricao: 'Estou com problema em criar uma função', autor: 'adrilucy' },
-    { titulo: 'C#', descricao: 'Estou com problema em um determinado código', autor: 'adrilucy' },
-    { titulo: 'HTML', descricao: 'Não consigo criar uma tabela dentro de uma pagina', autor: 'adrilucy' },
-    { titulo: 'aaa', descricao: 'Estou com problema em criar uma classe', autor: 'adrilucy' },
-    { titulo: 'bb', descricao: 'Estou com problema em criar uma função', autor: 'adrilucy' },
-    { titulo: 'ccc#', descricao: 'Estou com problema em um determinado código', autor: 'adrilucy' },
-    { titulo: 'ddd', descricao: 'Não consigo criar uma tabela dentro de uma pagina', autor: 'adrilucy' },
-    { titulo: 'HTML', descricao: 'Não consigo criar uma tabela dentro de uma pagina', autor: 'adrilucy' },
-    { titulo: 'aaa', descricao: 'Estou com problema em criar uma classe', autor: 'adrilucy' },
-    { titulo: 'bb', descricao: 'Estou com problema em criar uma função', autor: 'adrilucy' },
-    { titulo: 'ccc#', descricao: 'Estou com problema em um determinado código', autor: 'adrilucy' },
-    { titulo: 'ddd', descricao: 'Não consigo criar uma tabela dentro de uma pagina', autor: 'adrilucy' }
-  ];
-
-  constructor(private router: Router) { }
-
-  // Método para redirecionar
-  onCriarTopico(): void {
-    this.router.navigate(['/criar-topico']);
-  }
-
+export class TopicosComponent implements OnInit {
+  topicos: Topic[] = [];  // Agora é um array de Topic
   currentPage = 0;
   itemsPerPage = 5;
 
-  get paginatedTopicos() {
+  constructor(
+    private router: Router,
+    private topicoService: TopicoService
+  ) {}
+
+  ngOnInit(): void {
+    this.carregarTopicos();
+  }
+
+  carregarTopicos(): void {
+    this.topicoService.getTopicos().subscribe({
+      next: (data) => {
+        console.log('Dados recebidos:', data);
+        this.topicos = data;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar tópicos:', err);
+      }
+    });
+  }
+
+  get paginatedTopicos(): Topic[] {
     const start = this.currentPage * this.itemsPerPage;
     const end = start + this.itemsPerPage;
     return this.topicos.slice(start, end);
@@ -48,5 +50,9 @@ export class TopicosComponent {
     } else if (direction === 'prev' && this.currentPage > 0) {
       this.currentPage--;
     }
+  }
+
+  onCriarTopico(): void {
+    this.router.navigate(['/criar-topico']);
   }
 }

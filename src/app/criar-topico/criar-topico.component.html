@@ -47,6 +47,15 @@
       </div>
     </div>
 
+    <div class="campo">
+      <label for="autor">Autor</label>
+      <input type="text" id="autor" formControlName="author" placeholder="Seu nome..." required />
+      <div *ngIf="topicoForm.get('author')?.invalid && topicoForm.get('author')?.touched" class="text-danger">
+        O nome do autor é obrigatório.
+      </div>
+    </div>
+    
+
     <button type="submit" class="btn-criar" [disabled]="topicoForm.invalid">Criar Tópico</button>
   </form>
 </div>
