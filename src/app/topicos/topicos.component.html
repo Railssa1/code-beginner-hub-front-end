@@ -1,12 +1,19 @@
-<div class="container">
+<div *ngIf="paginatedTopicos.length <= 0" class="empty-message">
+  <h3 *ngIf="!isMentor">Nenhum tópico criado ainda! Que tal criar um?</h3>
+  <h3 *ngIf="isMentor">Nenhum tópico criado ainda!</h3>
+  <button class="btn-criar-empty" (click)="onCriarTopico()" *ngIf="!isMentor">Criar Tópico</button>
+</div>
+
+<div class="container" *ngIf="paginatedTopicos.length > 0">
   <div class="topico-card" *ngFor="let topico of paginatedTopicos">
     <div class="topico-info">
-      <h3>{{ topico.title }}</h3> 
-      <p>{{ topico.description }}</p> 
-      <p><strong>Linguagens:</strong> {{ topico.languages.join(', ') }}</p> 
-      <span class="autor">Autor: {{ topico.author }}</span> 
+      <h3>{{ topico.title }}</h3>
+      <p>{{ topico.description }}</p>
+      <p><strong>Linguagens:</strong> {{ topico.languages.join(', ') }}</p>
+      <span class="autor">Autor: {{ topico.author }}</span>
     </div>
-    <button class="btn-atender">Atender tópicos</button>
+    <button class="btn-atender" *ngIf="isMentor">Atender tópicos</button>
+    <button class="btn-atender" *ngIf="!isMentor">Visualizar respostas</button>
   </div>
 
   <div class="bottom-controls">
@@ -14,6 +21,6 @@
       <button (click)="changePage('prev')" [disabled]="currentPage === 0">Anterior</button>
       <button (click)="changePage('next')" [disabled]="(currentPage + 1) * itemsPerPage >= topicos.length">Próximo</button>
     </div>
-    <button class="btn-criar" (click)="onCriarTopico()">Criar Tópico</button>
+    <button class="btn-criar" (click)="onCriarTopico()" *ngIf="!isMentor">Criar Tópico</button>
   </div>
 </div>

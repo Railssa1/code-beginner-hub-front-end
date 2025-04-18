@@ -12,6 +12,7 @@ import { model, signal, computed } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { AuthGuard } from '../auth.guard';
 
 @Component({
   selector: 'app-perfil-usuario',
@@ -48,7 +49,8 @@ export class PerfilUsuarioComponent implements OnInit {
   constructor(
     private userService: UserService,
     private snackBar: MatSnackBar,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authGuard: AuthGuard
   ) {}
 
   ngOnInit(): void {
@@ -168,5 +170,9 @@ export class PerfilUsuarioComponent implements OnInit {
         });
       }
     );
+  }
+
+  logout(): void {
+    this.authGuard.logout();
   }
 }

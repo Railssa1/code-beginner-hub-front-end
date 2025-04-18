@@ -1,3 +1,4 @@
+import { UserEstudante, UserMentor } from './../interfaces/user.model';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
@@ -10,6 +11,7 @@ import { NgIf, NgFor } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-criar-topico',
@@ -31,6 +33,7 @@ import { Router } from '@angular/router';
 })
 export class CriarTopicoComponent implements OnInit {
   topicoForm!: FormGroup;
+  email = (localStorage.getItem('usuario') || '').replace(/"/g, '');
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   readonly linguagens = signal<string[]>([]);
@@ -53,7 +56,7 @@ export class CriarTopicoComponent implements OnInit {
       description: ['', [Validators.required]],
       languages: [[], [Validators.required]],
       linguagensInput: [''],
-      author: ['', [Validators.required]] 
+      author: [this.email]
     });
   }
 

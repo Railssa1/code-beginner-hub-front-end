@@ -6,15 +6,16 @@ import { EsqueciSenhaComponent } from './esqueci-senha/esqueci-senha.component';
 import { RedefinirSenhaComponent } from './redefinir-senha/redefinir-senha.component';
 import { TopicosComponent } from './topicos/topicos.component';
 import { CriarTopicoComponent } from './criar-topico/criar-topico.component';
+import { AuthGuard } from './auth.guard';
+import { AlreadyAuthGuard } from './already-auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'cadastro-usuario', component: CadastroUsuarioComponent },
-  { path: 'esqueci-senha', component: EsqueciSenhaComponent },
-  { path: 'redefinir-senha', component: RedefinirSenhaComponent },
-  { path: 'perfil-usuario', component: PerfilUsuarioComponent},
-  { path: 'topicos', component: TopicosComponent},
-  { path: 'criar-topico', component: CriarTopicoComponent}
+  { path: 'login', component: LoginComponent, canActivate: [AlreadyAuthGuard] },
+  { path: 'cadastro-usuario', component: CadastroUsuarioComponent, canActivate: [AlreadyAuthGuard] },
+  { path: 'esqueci-senha', component: EsqueciSenhaComponent, canActivate: [AlreadyAuthGuard] },
+  { path: 'redefinir-senha', component: RedefinirSenhaComponent, canActivate: [AlreadyAuthGuard] },
+  { path: 'perfil-usuario', component: PerfilUsuarioComponent, canActivate: [AuthGuard] },
+  { path: 'topicos', component: TopicosComponent, canActivate: [AuthGuard] },
+  { path: 'criar-topico', component: CriarTopicoComponent, canActivate: [AuthGuard] },
 ];
-

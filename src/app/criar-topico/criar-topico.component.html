@@ -1,7 +1,6 @@
 <div class="container">
-  <h2>Criar Tópico</h2>
-
   <form [formGroup]="topicoForm" (ngSubmit)="onSubmit()" class="form-criar">
+    <h2 class="text-center">Criar Tópico</h2>
     <div class="campo">
       <label for="titulo">Título</label>
       <input type="text" id="titulo" formControlName="title" placeholder="Digite o título do tópico" required />
@@ -46,15 +45,6 @@
         A descrição é obrigatória.
       </div>
     </div>
-
-    <div class="campo">
-      <label for="autor">Autor</label>
-      <input type="text" id="autor" formControlName="author" placeholder="Seu nome..." required />
-      <div *ngIf="topicoForm.get('author')?.invalid && topicoForm.get('author')?.touched" class="text-danger">
-        O nome do autor é obrigatório.
-      </div>
-    </div>
-    
 
     <button type="submit" class="btn-criar" [disabled]="topicoForm.invalid">Criar Tópico</button>
   </form>

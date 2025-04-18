@@ -22,4 +22,8 @@ export class UserService {
   updateUser(user: UserMentor | UserEstudante): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/atualiza-user`, user);
   }
+
+  isMentor(user: UserMentor | UserEstudante): user is UserMentor {
+    return 'skills' in user && 'seniority' in user;
+  }
 }

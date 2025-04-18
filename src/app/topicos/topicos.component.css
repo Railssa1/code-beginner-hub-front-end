@@ -25,7 +25,7 @@
   border: 1px solid #ddd;
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  
+
 }
 
 
@@ -114,6 +114,31 @@
   font-weight: bold;
   margin-bottom: 1.5rem;
 
+}
+
+.empty-message {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.empty-message h3 {
+  font-size: 1.4rem;
+}
+
+.btn-criar-empty {
+  background-color: #34265E;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 1rem;
 }
 
 /* responsivo para mobile */
