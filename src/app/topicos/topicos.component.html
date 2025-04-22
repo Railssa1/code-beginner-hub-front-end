@@ -1,7 +1,8 @@
 <div *ngIf="paginatedTopicos.length <= 0" class="empty-message">
-  <h3 *ngIf="!isMentor">Nenhum tópico criado ainda! Que tal criar um?</h3>
-  <h3 *ngIf="isMentor">Nenhum tópico criado ainda!</h3>
-  <button class="btn-criar-empty" (click)="onCriarTopico()" *ngIf="!isMentor">Criar Tópico</button>
+  <h3 *ngIf="!isMentor && !somenteAtivos">Nenhum tópico criado ainda! Que tal criar um?</h3>
+  <h3 *ngIf="isMentor && !somenteAtivos">Nenhum tópico criado ainda!</h3>
+  <h3 *ngIf="somenteAtivos">Nenhum tópico foi concluído ainda!</h3>
+  <button class="btn-criar-empty" (click)="onCriarTopico()" *ngIf="!isMentor && !somenteAtivos">Criar Tópico</button>
 </div>
 
 <div class="container" *ngIf="paginatedTopicos.length > 0">

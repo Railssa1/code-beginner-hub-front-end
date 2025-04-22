@@ -1,3 +1,4 @@
+import { TopicosConcluidosComponent } from './topicos-concluidos/topicos-concluidos.component';
 import { Routes } from '@angular/router';
 import { CadastroUsuarioComponent } from './cadastro-usuario/cadastro-usuario.component';
 import { LoginComponent } from './login/login.component';
@@ -8,6 +9,7 @@ import { TopicosComponent } from './topicos/topicos.component';
 import { CriarTopicoComponent } from './criar-topico/criar-topico.component';
 import { AuthGuard } from './auth.guard';
 import { AlreadyAuthGuard } from './already-auth.guard';
+import { EntreEmContatoComponent } from './entre-em-contato/entre-em-contato.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -18,4 +20,6 @@ export const routes: Routes = [
   { path: 'perfil-usuario', component: PerfilUsuarioComponent, canActivate: [AuthGuard] },
   { path: 'topicos', component: TopicosComponent, canActivate: [AuthGuard] },
   { path: 'criar-topico', component: CriarTopicoComponent, canActivate: [AuthGuard] },
+  { path: 'topicos-concluidos', component: TopicosConcluidosComponent, canActivate: [AuthGuard] },
+  { path: 'entre-em-contato', component: EntreEmContatoComponent, canActivate: [AuthGuard] },
 ];

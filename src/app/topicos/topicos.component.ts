@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TopicoService } from '../services/topic.service';
@@ -16,6 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   ]
 })
 export class TopicosComponent implements OnInit {
+  @Input() somenteAtivos = false;
   topicos: Topic[] = [];  // Agora é um array de Topic
   currentPage = 0;
   itemsPerPage = 5;
@@ -53,16 +54,22 @@ export class TopicosComponent implements OnInit {
 
     this.topicoService.getTopicos().subscribe({
       next: (data) => {
+        let filtrados: Topic[] = [];
+
         if (this.userService.isMentor(this.user)) {
           const mentor = this.user;
-          this.topicos = data.filter(topico =>
+          filtrados = data.filter(topico =>
             topico.languages.some(lang =>
               mentor.skills.map(skill => skill.toLowerCase()).includes(lang.toLowerCase())
             )
           );
         } else {
-          this.topicos = data.filter(topico => topico.author === this.email);
+          filtrados = data.filter(topico => topico.author === this.email);
         }
+
+        this.topicos = this.somenteAtivos
+          ? filtrados.filter(t => t.completed)
+          : filtrados.filter(t => !t.completed);
       },
       error: (err) => {
         console.error('Erro ao carregar tópicos:', err);

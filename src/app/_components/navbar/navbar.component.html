@@ -1,5 +1,7 @@
 <div class="container">
   <header class="header">
+    <img src="../../assets/img/logo.png" class="img mx-auto" alt="Logo CodeBeginnerHub" width="40" height="40">
+
     <div class="search-container">
       <input type="text" class="search-bar" placeholder="Busque por tópicos">
     </div>
@@ -14,8 +16,8 @@
   </header>
 
   <nav class="nav-bar">
-    <a href="#" style="color: #34265E" onclick="window.location.href='./topicos'; return false;">Tópicos</a>
-    <a href="#" style="color: #34265E">Tópicos Concluídos</a>
-    <a href="#" style="color: #34265E">Entre em contato</a>
+    <a href="#" class="nav-item" [routerLink]="['/topicos']">Tópicos</a>
+    <a href="#" class="nav-item" [routerLink]="['/topicos-concluidos']">Tópicos Concluídos</a>
+    <a href="#" class="nav-item" [routerLink]="['/entre-em-contato']">Entre em contato</a>
   </nav>
 </div>
