@@ -1,34 +1,35 @@
 version: '3.8'
+
 services:
-  mysql:
-    image: railssa/sprint1_cliente:mysql
-    container_name: mysql-container
+  backend:
+    image: adrilucy/codebeginnerhub:back_sprint02
+    container_name: backend_codebeginnerhub_sprint02
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: meubanco
+      DATABASE_URL: "mysql://root:admin@mysql:3306/CodeBeginnerHub"
+      JWT_SECRET: 123456
+
+  mysql:
+    image: mysql:8
+    container_name: mysql_codebeginnerhub_sprint02
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: CodeBeginnerHub
     ports:
       - "3306:3306"
-
-  backend:
-    image: railssa/sprint1_cliente:backend
-    container_name: backend-container
-    depends_on:
-      - mysql
-    ports:
-      - "8080:8080"
-
-  auth-api:
-    image: railssa/sprint1_cliente:auth-api
-    container_name: auth-container
-    depends_on:
-      - mysql
-    ports:
-      - "8081:8081"
+    volumes:
+      - mysql_data:/var/lib/mysql
 
   frontend:
-    image: railssa/sprint1_cliente:frontend
-    container_name: frontend-container
+    image: adrilucy/codebeginnerhub:front_sprint02
+    container_name: frontend_codebeginnerhub_sprint02
     depends_on:
       - backend
     ports:
       - "4200:4200"
+
+volumes:
+  mysql_data:
