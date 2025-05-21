@@ -1,10 +1,10 @@
 <div class="container">
   <header class="header">
     <img src="../../assets/img/logo.png" class="img mx-auto" alt="Logo CodeBeginnerHub" width="40" height="40">
-
-    <div class="search-container">
-      <input type="text" class="search-bar" placeholder="Busque por tópicos">
+    <div class="search-container"  [ngStyle]="{ visibility: getActualRoute() !== '/entre-em-contato' ? 'visible' : 'hidden' }">
+      <input type="text" class="search-bar" placeholder="Busque por tópicos" (input)="onSearchChange($event)" />
     </div>
+
     <div class="icons">
       <button type="submit" class="btn full-width">
         <img src="assets/img/Sino.png" alt="Sino" width="20" height="20">

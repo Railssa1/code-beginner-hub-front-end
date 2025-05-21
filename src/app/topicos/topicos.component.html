@@ -1,8 +1,18 @@
 <div *ngIf="paginatedTopicos.length <= 0" class="empty-message">
-  <h3 *ngIf="!isMentor && !somenteAtivos">Nenhum tópico criado ainda! Que tal criar um?</h3>
-  <h3 *ngIf="isMentor && !somenteAtivos">Nenhum tópico criado ainda!</h3>
-  <h3 *ngIf="somenteAtivos">Nenhum tópico foi concluído ainda!</h3>
-  <button class="btn-criar-empty" (click)="onCriarTopico()" *ngIf="!isMentor && !somenteAtivos">Criar Tópico</button>
+  <h3 *ngIf="searchTerm">
+    Nenhum tópico encontrado para a busca realizada!
+  </h3>
+  <h3 *ngIf="!searchTerm && !isMentor && !somenteAtivos">
+    Nenhum tópico criado ainda! Que tal criar um?
+  </h3>
+  <h3 *ngIf="!searchTerm && isMentor && !somenteAtivos">
+    Nenhum tópico criado ainda!
+  </h3>
+  <h3 *ngIf="!searchTerm && somenteAtivos">
+    Nenhum tópico foi concluído ainda!
+  </h3>
+  <button class="btn-criar-empty" (click)="onCriarTopico()" *ngIf="!isMentor && !somenteAtivos && !searchTerm">Criar
+    Tópico</button>
 </div>
 
 <div class="container" *ngIf="paginatedTopicos.length > 0">
@@ -20,7 +30,8 @@
   <div class="bottom-controls">
     <div class="pagination">
       <button (click)="changePage('prev')" [disabled]="currentPage === 0">Anterior</button>
-      <button (click)="changePage('next')" [disabled]="(currentPage + 1) * itemsPerPage >= topicos.length">Próximo</button>
+      <button (click)="changePage('next')"
+        [disabled]="(currentPage + 1) * itemsPerPage >= topicos.length">Próximo</button>
     </div>
     <button class="btn-criar" (click)="onCriarTopico()" *ngIf="!isMentor">Criar Tópico</button>
   </div>

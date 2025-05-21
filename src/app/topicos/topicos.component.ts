@@ -1,3 +1,4 @@
+import { SearchService } from './../services/search.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -22,17 +23,23 @@ export class TopicosComponent implements OnInit {
   itemsPerPage = 5;
   user!: UserMentor | UserEstudante;
   email = (localStorage.getItem('usuario') || '').replace(/"/g, '');
-  isMentor = false
+  isMentor = false;
+  searchTerm = '';
 
   constructor(
     private router: Router,
     private topicoService: TopicoService,
     private userService: UserService,
     private snackBar: MatSnackBar,
-  ) {}
+    private searchService: SearchService
+  ) { }
 
   ngOnInit(): void {
     this.carregarTopicos();
+    this.searchService.searchTerm$.subscribe(term => {
+      this.searchTerm = term;
+      this.currentPage = 0;
+    });
 
     this.userService.getUserByEmail(this.email).subscribe(
       (data: UserMentor | UserEstudante) => {
@@ -78,9 +85,17 @@ export class TopicosComponent implements OnInit {
   }
 
   get paginatedTopicos(): Topic[] {
+    let filtrados = this.topicos;
+    if (this.searchTerm) {
+      filtrados = filtrados.filter(t =>
+        t.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        t.description.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        t.languages.some(lang => lang.toLowerCase().includes(this.searchTerm.toLowerCase()))
+      );
+    }
     const start = this.currentPage * this.itemsPerPage;
     const end = start + this.itemsPerPage;
-    return this.topicos.slice(start, end) || [];
+    return filtrados.slice(start, end) || [];
   }
 
   changePage(direction: 'next' | 'prev') {
@@ -95,5 +110,8 @@ export class TopicosComponent implements OnInit {
     this.router.navigate(['/criar-topico']);
   }
 
+  atenderTopico(topico: Topic): void {
+    this.router.navigate(['/atender-topico', topico.id]);
+  }
 
 }
