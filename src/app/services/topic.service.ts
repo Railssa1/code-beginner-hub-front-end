@@ -1,21 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Topic } from '../interfaces/topico.model';
+import { Topic, TopicoChat } from '../interfaces/topico.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TopicoService {
-  private apiUrl = 'http://localhost:3000/api/topics';  // Certifique-se de que a URL está correta
+  private apiUrl = 'http://localhost:3000/api/topics';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  createTopico(topicoData: Topic): Observable<any> {
-    return this.http.post(`${this.apiUrl}/create-topic`, topicoData);
+  createTopico(topicoData: TopicoChat): Observable<TopicoChat> {
+    return this.http.post<TopicoChat>(`${this.apiUrl}/create-topic`, topicoData);
   }
 
   getTopicos(): Observable<Topic[]> {
     return this.http.get<Topic[]>(this.apiUrl);
   }
+
+  vincularMentor(topicId: number, mentorId: number): Observable<Topic> {
+    return this.http.patch<Topic>(`${this.apiUrl}/vincular-mentor/${topicId}`, { mentorId });
+  }
+
 }

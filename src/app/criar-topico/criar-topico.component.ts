@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { TopicoChat } from '../interfaces/topico.model';
 
 @Component({
   selector: 'app-criar-topico',
@@ -34,6 +35,7 @@ import { UserService } from '../services/user.service';
 export class CriarTopicoComponent implements OnInit {
   topicoForm!: FormGroup;
   email = (localStorage.getItem('usuario') || '').replace(/"/g, '');
+  user!: UserEstudante | UserMentor;
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   readonly linguagens = signal<string[]>([]);
@@ -47,8 +49,9 @@ export class CriarTopicoComponent implements OnInit {
     private fb: FormBuilder,
     private topicoService: TopicoService,
     private snackBar: MatSnackBar,
-    private router: Router
-  ) {}
+    private router: Router,
+    private userService: UserService
+  ) { }
 
   ngOnInit(): void {
     this.topicoForm = this.fb.group({
@@ -58,6 +61,19 @@ export class CriarTopicoComponent implements OnInit {
       linguagensInput: [''],
       author: [this.email]
     });
+
+    this.userService.getUserByEmail(this.email).subscribe({
+      next: (usuario) => {
+        this.user = usuario;
+      },
+      error: () => {
+        this.snackBar.open('Erro ao carregar dados do usuário', 'Fechar', {
+          duration: 3000,
+          panelClass: ['snackbar-erro']
+        });
+      }
+    });
+
   }
 
   addLinguagem(event: MatChipInputEvent): void {
@@ -101,23 +117,26 @@ export class CriarTopicoComponent implements OnInit {
       return;
     }
 
-    const topicoData = this.topicoForm.value;
-    this.topicoService.createTopico(topicoData).subscribe(
-      () => {
-        this.snackBar.open('Tópico criado com sucesso!', 'Fechar', {
-          duration: 3000,
-          panelClass: ['snackbar-sucesso']
-        });
+    const topicoData: TopicoChat = {
+      title: this.topicoForm.value.title,
+      description: this.topicoForm.value.description,
+      languages: this.topicoForm.value.languages,
+      author: this.email,
+      studentId: this.user?.id!.toString(),
+      mentorId: ""
+    };
+
+    this.topicoService.createTopico(topicoData).subscribe({
+      next: (res) => {
+        this.snackBar.open('Tópico criado com sucesso!', 'Fechar', { duration: 3000, panelClass: ['snackbar-sucesso'] });
         this.topicoForm.reset();
         this.linguagens.set([]);
         this.router.navigate(['/topicos']);
       },
-      () => {
-        this.snackBar.open('Erro ao criar tópico. Tente novamente.', 'Fechar', {
-          duration: 3000,
-          panelClass: ['snackbar-erro']
-        });
+      error: () => {
+        this.snackBar.open('Erro ao criar tópico. Tente novamente.', 'Fechar', { duration: 3000, panelClass: ['snackbar-erro'] });
       }
-    );
+    });
   }
+
 }
