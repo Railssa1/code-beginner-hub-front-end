@@ -38,7 +38,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   public mensagem = '';
 
   public mensagens: Mensagem[] = [];
-  public usuarios: string[] = []; // <- Adicionado para controlar quem está na sala
+  public usuarios: string[] = [];
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
@@ -54,7 +54,14 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.topicoId = Number(chatId);
     this.meuUsuario = (localStorage.getItem('usuario') || '').replace(/"/g, '');
 
-    // Conecta no websocket
+    const mensagensSalvasJSON = localStorage.getItem(`mensagensChat_${this.topicoId}`);
+    if (mensagensSalvasJSON) {
+      this.mensagens = JSON.parse(mensagensSalvasJSON).map((m: any) => ({
+        ...m,
+        createdAt: new Date(m.createdAt)
+      }));
+    }
+
     this.wsService.connect(this.topicoId, this.meuUsuario);
 
     this.wsService.messages$.subscribe((msg) => {
@@ -65,6 +72,9 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
           topicId: msg.topicId,
           createdAt: msg.createdAt ? new Date(msg.createdAt) : new Date()
         });
+
+        localStorage.setItem(`mensagensChat_${this.topicoId}`, JSON.stringify(this.mensagens));
+
         this.cdr.detectChanges();
       }
 
@@ -93,7 +103,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     return this.mensagens.filter(m => m.topicId === this.topicoId);
   }
 
-  // Mostra o outro usuário que não é o atual
   public get outroUsuario() {
     return this.usuarios.find(u => u !== this.meuUsuario) || 'Aguardando usuário';
   }
