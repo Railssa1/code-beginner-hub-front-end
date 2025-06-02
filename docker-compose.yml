@@ -30,6 +30,8 @@ services:
       - backend
     ports:
       - "4200:4200"
+    environment:
+      API_URL: "http://localhost:3001"
 
 volumes:
   mysql_data:
