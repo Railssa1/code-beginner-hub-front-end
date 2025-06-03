@@ -26,4 +26,8 @@ export class TopicoService {
   updateTopico(topicId: number, updateData: Partial<Topic>): Observable<Topic> {
     return this.http.patch<Topic>(`${this.apiUrl}/${topicId}`, updateData);
   }
+
+  getTopicoById(topicId: number): Observable<Topic> {
+    return this.http.get<Topic>(`${this.apiUrl}/${topicId}`);
+  }
 }

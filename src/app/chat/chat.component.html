@@ -2,7 +2,13 @@
   <div class="chat-conversa">
     <div class="chat-header">
       <h3>{{ meuEmail }} <span class="versus">-</span> {{ nomeOutroUsuario }}</h3>
-      <button class="btn-padrao" (click)="concluirChat()">Concluir chat</button>
+      <button class="btn-padrao" (click)="concluirTopico()" [disabled]="topicoConcluido">
+        Concluir chat
+      </button>
+    </div>
+
+    <div *ngIf="topicoConcluido" class="mensagem-topico-concluido">
+      Este chat foi concluído. Não é possível enviar novas mensagens.
     </div>
 
     <div class="chat-mensagens" #scrollContainer>
@@ -16,8 +22,11 @@
     </div>
 
     <div class="chat-input">
-      <input [(ngModel)]="mensagemDigitada" (keyup.enter)="enviarMensagem()" placeholder="Digite sua mensagem..." />
-      <button class="btn-padrao" (click)="enviarMensagem()">Enviar</button>
+      <input [(ngModel)]="mensagemDigitada" (keyup.enter)="enviarMensagem()" placeholder="Digite sua mensagem..."
+        [disabled]="topicoConcluido" />
+      <button class="btn-padrao" (click)="enviarMensagem()" [disabled]="topicoConcluido">
+        Enviar
+      </button>
     </div>
   </div>
 </div>

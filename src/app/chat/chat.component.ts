@@ -1,8 +1,10 @@
 import { NgFor, CommonModule } from "@angular/common";
 import { Component, OnInit, OnDestroy, AfterViewChecked, ViewChild, ElementRef, ChangeDetectorRef } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { WebSocketService } from "../services/web-socket.service";
+import { TopicoService } from "../services/topic.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 export interface Mensagem {
   author: string;
@@ -25,19 +27,23 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   public meuEmail = '';
   public topicoId = 0;
   public mensagemDigitada = '';
-
   public mensagens: Mensagem[] = [];
+  public topicoConcluido = false;
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
     private wsService: WebSocketService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private topicoService: TopicoService,
+    private router: Router,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
     this.inicializarDados();
+    this.verificarStatusTopico();
     this.conectarWebSocket();
   }
 
@@ -54,6 +60,18 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         createdAt: new Date(m.createdAt)
       }));
     }
+  }
+
+  private verificarStatusTopico() {
+    this.topicoService.getTopicoById(this.topicoId).subscribe({
+      next: (topico) => {
+        this.topicoConcluido = topico.completed;
+      },
+      error: () => {
+        this.snackBar.open('Erro ao carregar o tópico', 'Fechar', { duration: 3000 });
+        this.router.navigate(['/topicos']);
+      }
+    });
   }
 
   private conectarWebSocket() {
@@ -88,6 +106,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   public enviarMensagem() {
+    if (this.topicoConcluido) {
+      this.snackBar.open('Este tópico está concluído. Não é possível enviar mensagens.', 'Fechar', { duration: 3000 });
+      return;
+    }
+
     if (!this.mensagemDigitada.trim()) return;
 
     const message = {
@@ -136,7 +159,22 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
-  concluirChat(){}
+  public concluirTopico() {
+    this.topicoService.updateTopico(this.topicoId, {
+      completed: true,
+      inProgress: false,
+      chatConcluded: true
+    }).subscribe({
+      next: () => {
+        this.snackBar.open('Tópico concluído com sucesso!', 'Fechar', { duration: 3000 });
+        this.router.navigate(['/topicos-concluidos']);
+      },
+      error: () => {
+        this.snackBar.open('Erro ao concluir chat', 'Fechar', { duration: 3000 });
+        this.router.navigate(['/topicos']);
+      }
+    });
+  }
 
   ngOnDestroy() {
     this.wsService.close();

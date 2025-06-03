@@ -122,8 +122,7 @@ export class CriarTopicoComponent implements OnInit {
       description: this.topicoForm.value.description,
       languages: this.topicoForm.value.languages,
       author: this.email,
-      studentId: this.user?.id!,
-      mentorId: -1
+      studentId: this.user?.id!
     };
 
     this.topicoService.createTopico(topicoData).subscribe({
