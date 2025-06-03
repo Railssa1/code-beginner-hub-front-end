@@ -1,27 +1,23 @@
 <div class="chat-page">
   <div class="chat-conversa">
     <div class="chat-header">
-      <h3>{{ outroUsuario }}</h3>
+      <h3>{{ meuEmail }} <span class="versus">-</span> {{ nomeOutroUsuario }}</h3>
+      <button class="btn-padrao" (click)="concluirChat()">Concluir chat</button>
     </div>
 
     <div class="chat-mensagens" #scrollContainer>
-      <div
-        *ngFor="let msg of mensagensFiltradas"
-        [class.me]="msg.author === meuUsuario"
-        class="mensagem"
-      >
+      <div *ngFor="let msg of mensagensFiltradas" [class.me]="msg.senderEmail === meuEmail" class="mensagem">
         <div class="mensagem-info">
           <strong>{{ msg.author }}</strong>
-
-          <span class="horario">{{ msg.createdAt | date:'HH:mm' }}</span>
+          <span class="horario">{{ msg.createdAt | date: 'HH:mm' }}</span>
         </div>
         <div class="mensagem-texto">{{ msg.text }}</div>
       </div>
     </div>
 
     <div class="chat-input">
-      <input [(ngModel)]="mensagem" (keyup.enter)="enviarMensagem()" placeholder="Digite sua mensagem..." />
-      <button (click)="enviarMensagem()">Enviar</button>
+      <input [(ngModel)]="mensagemDigitada" (keyup.enter)="enviarMensagem()" placeholder="Digite sua mensagem..." />
+      <button class="btn-padrao" (click)="enviarMensagem()">Enviar</button>
     </div>
   </div>
 </div>

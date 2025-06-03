@@ -1,26 +1,15 @@
-import {
-  NgFor,
-  NgIf,
-  CommonModule
-} from '@angular/common';
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  AfterViewChecked,
-  ChangeDetectorRef
-} from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { WebSocketService } from '../services/web-socket.service';
+import { NgFor, CommonModule } from "@angular/common";
+import { Component, OnInit, OnDestroy, AfterViewChecked, ViewChild, ElementRef, ChangeDetectorRef } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
+import { WebSocketService } from "../services/web-socket.service";
 
-interface Mensagem {
+export interface Mensagem {
   author: string;
   text: string;
   topicId: number;
   createdAt: Date;
+  senderEmail: string;
 }
 
 @Component({
@@ -28,74 +17,88 @@ interface Mensagem {
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
   standalone: true,
-  imports: [NgFor, NgIf, FormsModule, CommonModule],
+  imports: [NgFor, FormsModule, CommonModule],
   providers: [WebSocketService]
 })
 export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
-  public meuUsuario = '';
+  public meuEmail = '';
   public topicoId = 0;
-  public mensagem = '';
+  public mensagemDigitada = '';
 
   public mensagens: Mensagem[] = [];
-  public usuarios: string[] = [];
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
     private wsService: WebSocketService,
     private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
+    this.inicializarDados();
+    this.conectarWebSocket();
+  }
+
+  private inicializarDados() {
     const chatId = this.route.snapshot.paramMap.get('id');
     this.topicoId = Number(chatId);
-    this.meuUsuario = (localStorage.getItem('usuario') || '').replace(/"/g, '');
 
-    const mensagensSalvasJSON = localStorage.getItem(`mensagensChat_${this.topicoId}`);
-    if (mensagensSalvasJSON) {
-      this.mensagens = JSON.parse(mensagensSalvasJSON).map((m: any) => ({
+    this.meuEmail = (localStorage.getItem('usuario') || '').replace(/"/g, '').trim();
+
+    const mensagensSalvas = localStorage.getItem(`mensagensChat_${this.topicoId}`);
+    if (mensagensSalvas) {
+      this.mensagens = JSON.parse(mensagensSalvas).map((m: any) => ({
         ...m,
         createdAt: new Date(m.createdAt)
       }));
     }
+  }
 
-    this.wsService.connect(this.topicoId, this.meuUsuario);
+  private conectarWebSocket() {
+    this.wsService.connect(this.topicoId, this.meuEmail);
 
     this.wsService.messages$.subscribe((msg) => {
-      if (msg.type === 'message' && msg.topicId === this.topicoId) {
-        this.mensagens.push({
-          author: msg.author,
-          text: msg.text,
-          topicId: msg.topicId,
-          createdAt: msg.createdAt ? new Date(msg.createdAt) : new Date()
-        });
+      if (msg.topicId !== this.topicoId) return;
 
-        localStorage.setItem(`mensagensChat_${this.topicoId}`, JSON.stringify(this.mensagens));
-
-        this.cdr.detectChanges();
-      }
-
-      if (msg.type === 'users') {
-        this.usuarios = msg.users;
-        this.cdr.detectChanges();
+      if (msg.type === 'message') {
+        this.receberMensagem(msg);
       }
     });
   }
 
+  private receberMensagem(msg: any) {
+    const autor = msg.senderName || msg.author || 'Desconhecido';
+    const texto = msg.message || msg.text || '';
+
+    if (texto.trim()) {
+      const novaMensagem: Mensagem = {
+        author: autor,
+        text: texto,
+        topicId: msg.topicId,
+        createdAt: msg.createdAt ? new Date(msg.createdAt) : new Date(),
+        senderEmail: msg.senderEmail || ''
+      };
+
+      this.mensagens.push(novaMensagem);
+      this.salvarMensagensLocalmente();
+      this.cdr.detectChanges();
+    }
+  }
+
   public enviarMensagem() {
-    if (!this.mensagem.trim()) return;
+    if (!this.mensagemDigitada.trim()) return;
 
     const message = {
       type: 'message',
       topicId: this.topicoId,
-      text: this.mensagem,
+      text: this.mensagemDigitada,
+      senderEmail: this.meuEmail
     };
 
     this.wsService.send(message);
-    this.mensagem = '';
+    this.mensagemDigitada = '';
     this.cdr.detectChanges();
   }
 
@@ -103,8 +106,22 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     return this.mensagens.filter(m => m.topicId === this.topicoId);
   }
 
-  public get outroUsuario() {
-    return this.usuarios.find(u => u !== this.meuUsuario) || 'Aguardando usuário';
+  public get nomeOutroUsuario(): string {
+    const meuEmailNormalizado = (this.meuEmail || '').trim().toLowerCase();
+
+    for (const msg of this.mensagens) {
+      const rawEmail = msg.senderEmail;
+      const emailMsg = typeof rawEmail === 'string' ? rawEmail.trim().toLowerCase() : '';
+
+      if (emailMsg && emailMsg !== meuEmailNormalizado) {
+        return msg.author || emailMsg || 'Outro usuário';
+      }
+    }
+    return 'Aguardando usuário';
+  }
+
+  private salvarMensagensLocalmente() {
+    localStorage.setItem(`mensagensChat_${this.topicoId}`, JSON.stringify(this.mensagens));
   }
 
   ngAfterViewChecked() {
@@ -114,8 +131,12 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   private scrollToBottom(): void {
     try {
       this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
-    } catch (err) { }
+    } catch (err) {
+      console.error('Erro ao rolar para baixo:', err);
+    }
   }
+
+  concluirChat(){}
 
   ngOnDestroy() {
     this.wsService.close();

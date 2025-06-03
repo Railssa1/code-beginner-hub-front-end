@@ -23,4 +23,7 @@ export class TopicoService {
     return this.http.patch<Topic>(`${this.apiUrl}/vincular-mentor/${topicId}`, { mentorId });
   }
 
+  updateTopico(topicId: number, updateData: Partial<Topic>): Observable<Topic> {
+    return this.http.patch<Topic>(`${this.apiUrl}/${topicId}`, updateData);
+  }
 }

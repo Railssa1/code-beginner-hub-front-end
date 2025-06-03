@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, Observable, timer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,17 +7,31 @@ import { Subject } from 'rxjs';
 export class WebSocketService {
   private socket!: WebSocket;
   private messagesSubject = new Subject<any>();
-
   public messages$ = this.messagesSubject.asObservable();
 
+  private isConnected = false;
+  private topicId!: number;
+  private username!: string;
+
   connect(topicId: number, username: string) {
+    if (this.isConnected) {
+      console.warn('WebSocket já conectado');
+      return;
+    }
+
+    this.topicId = topicId;
+    this.username = username;
+
     this.socket = new WebSocket(`ws://localhost:3000`);
 
     this.socket.onopen = () => {
+      console.log('WebSocket conectado');
+      this.isConnected = true;
+
       const joinMessage = {
         type: 'join',
-        username,
-        topicId
+        username: this.username,
+        topicId: this.topicId
       };
       this.send(joinMessage);
     };
@@ -32,15 +46,24 @@ export class WebSocketService {
     };
 
     this.socket.onclose = () => {
-      console.log('WebSocket connection closed');
+      console.warn('WebSocket desconectado. Tentando reconectar em 3 segundos...');
+      this.isConnected = false;
+      this.reconnect();
     };
   }
 
+  private reconnect() {
+    timer(3000).subscribe(() => {
+      console.log('Tentando reconectar...');
+      this.connect(this.topicId, this.username);
+    });
+  }
+
   send(message: any) {
-    if (this.socket.readyState === WebSocket.OPEN) {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(JSON.stringify(message));
     } else {
-      console.error('WebSocket is not open');
+      console.error('WebSocket não está aberto. Mensagem não enviada:', message);
     }
   }
 
@@ -48,5 +71,6 @@ export class WebSocketService {
     if (this.socket) {
       this.socket.close();
     }
+    this.isConnected = false;
   }
 }

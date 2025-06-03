@@ -5,19 +5,23 @@ export interface Topic {
   description: string;
   author?: string;
   completed: boolean;
-  mentorId?: string;
+  inProgress?: boolean;
+  mentorId?: number;
   mentorName?: string;
+  studentId: number;
+  chatReadByMentor?: boolean;
+  chatReadByStudent?: boolean;
+  chatConcluded?: boolean;
 }
 
 export interface TopicoChat {
-  id?: string;
+  id?: number;
   title: string;
   description: string;
   languages: string[];
   author: string;
-  studentId: string;
-  mentorId?: string;
+  studentId: number;
+  mentorId?: number;
   mentorName?: string;
   status?: 'aberto' | 'em_andamento' | 'concluido';
 }
-

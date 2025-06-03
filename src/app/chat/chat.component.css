@@ -25,6 +25,9 @@
   font-weight: 600;
   font-size: 1.1rem;
   color: #34265E;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .chat-mensagens {
@@ -65,11 +68,17 @@
 
 .mensagem-info {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   font-size: 0.8rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
   color: #000;
+}
+
+.mensagem-info .horario {
+  margin-left: 0.5rem;
+  color: #666;
+  font-weight: 400;
 }
 
 .chat-input {
@@ -92,7 +101,7 @@
   font-size: 1rem;
 }
 
-.chat-input button {
+.btn-padrao {
   background-color: #34265E;
   border: none;
   padding: 0.6rem 1.2rem;
@@ -103,7 +112,7 @@
   transition: background-color 0.3s ease;
 }
 
-.chat-input button:hover {
+.btn-padrao:hover {
   background-color: #4a3b86;
 }
 
