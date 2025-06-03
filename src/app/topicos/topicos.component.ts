@@ -16,7 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   imports: [CommonModule]
 })
 export class TopicosComponent implements OnInit {
-  @Input() somenteAtivos = true;
+  @Input() somenteAtivos = false;
 
   topicos: Topic[] = [];
   currentPage = 0;
@@ -77,11 +77,12 @@ export class TopicosComponent implements OnInit {
           filtrados = data.filter(topico => topico.studentId === estudante.id);
         }
 
-        this.topicos = this.somenteAtivos
-          ? filtrados.filter(t => !t.completed && !t.chatConcluded)
-          : filtrados.filter(t => t.completed && t.chatConcluded);
+        if (!this.somenteAtivos) {
+          this.topicos = filtrados.filter(t => !t.completed);
+        } else {
+          this.topicos = filtrados.filter(t => t.completed);
+        }
 
-        console.log('somenteAtivos:', this.somenteAtivos, 'topicos filtrados:', this.topicos);
       },
       error: (err) => {
         console.error('Erro ao carregar tópicos:', err);

@@ -1,4 +1,4 @@
-import { NgFor, CommonModule } from "@angular/common";
+import { NgFor, CommonModule, NgIf } from "@angular/common";
 import { Component, OnInit, OnDestroy, AfterViewChecked, ViewChild, ElementRef, ChangeDetectorRef } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -12,6 +12,7 @@ export interface Mensagem {
   topicId: number;
   createdAt: Date;
   senderEmail: string;
+  senderType: string
 }
 
 @Component({
@@ -19,7 +20,7 @@ export interface Mensagem {
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
   standalone: true,
-  imports: [NgFor, FormsModule, CommonModule],
+  imports: [NgFor, FormsModule, CommonModule, NgIf],
   providers: [WebSocketService]
 })
 export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
@@ -29,6 +30,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   public mensagemDigitada = '';
   public mensagens: Mensagem[] = [];
   public topicoConcluido = false;
+  public souEstudante = false;
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
@@ -96,7 +98,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         text: texto,
         topicId: msg.topicId,
         createdAt: msg.createdAt ? new Date(msg.createdAt) : new Date(),
-        senderEmail: msg.senderEmail || ''
+        senderEmail: msg.senderEmail || '',
+        senderType: msg.senderType
       };
 
       this.mensagens.push(novaMensagem);
