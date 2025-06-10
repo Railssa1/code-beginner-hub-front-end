@@ -24,9 +24,15 @@
     </div>
     <button
       class="btn-atender"
-      *ngIf="isMentor"
+      *ngIf="isMentor && !somenteAtivos"
       (click)="atenderTopico(topico)">
       Atender tópicos
+    </button>
+    <button
+      class="btn-atender"
+      *ngIf="isMentor && somenteAtivos"
+      (click)="abrirChat(topico)">
+      Visualizar respostas
     </button>
     <button
       class="btn-atender"

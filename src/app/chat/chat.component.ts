@@ -5,6 +5,10 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { WebSocketService } from "../services/web-socket.service";
 import { TopicoService } from "../services/topic.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { UserEstudante, UserMentor } from '../interfaces/user.model';
+import { UserService } from '../services/user.service';
+
+
 
 export interface Mensagem {
   author: string;
@@ -32,6 +36,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   public topicoConcluido = false;
   public souEstudante = false;
 
+  user!: UserMentor | UserEstudante;
+  email = (localStorage.getItem('usuario') || '').replace(/"/g, '');
+  isMentor = false;
+  searchTerm = '';
+
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
   constructor(
@@ -41,12 +50,25 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     private topicoService: TopicoService,
     private router: Router,
     private snackBar: MatSnackBar,
+    private userService: UserService,
   ) { }
 
   ngOnInit() {
     this.inicializarDados();
     this.verificarStatusTopico();
     this.conectarWebSocket();
+
+      this.userService.getUserByEmail(this.email).subscribe(
+    (data: UserMentor | UserEstudante) => {
+      this.user = data;
+      this.isMentor = this.userService.isMentor(this.user);
+      this.souEstudante = !this.isMentor; // define quem é o usuário
+    },
+    () => {
+      this.snackBar.open('Erro ao buscar dados do usuário', 'Fechar', { duration: 3000 });
+    }
+  );
+
   }
 
   private inicializarDados() {

@@ -34,7 +34,7 @@ export class CadastroUsuarioComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   readonly currentSkill = model('');
   readonly skills = signal<string[]>([]);
-  readonly allSkills: string[] = ['Front-End', 'Back-End', 'Segurança da informação', 'Banco de dados', 'Arquitetura', 'Cloud'];
+  readonly allSkills: string[] = ['Front-End', 'Back-End', 'Segurança da informação', 'Banco de dados', 'Arquitetura', 'Cloud','Java', 'Python', 'HTML', 'CSS', 'JavaScript', 'C#', 'C++', 'Ruby'];
   readonly filteredSkills = computed(() => {
     const current = this.currentSkill().toLowerCase();
     return current ? this.allSkills.filter(skill => skill.toLowerCase().includes(current)) : this.allSkills.slice();

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Topic, TopicoChat } from '../interfaces/topico.model';
+import { Mensagem } from '../chat/chat.component';
 
 @Injectable({
   providedIn: 'root'
@@ -30,4 +31,12 @@ export class TopicoService {
   getTopicoById(topicId: number): Observable<Topic> {
     return this.http.get<Topic>(`${this.apiUrl}/${topicId}`);
   }
+
+  getMensagensPorTopico(topicId: number): Observable<Mensagem[]> {
+    return this.http.get<Mensagem[]>(`http://localhost:3000/api/chat/mensagens/${topicId}`);
+  }
+
+
+
+  
 }

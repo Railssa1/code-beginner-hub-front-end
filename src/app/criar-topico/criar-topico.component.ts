@@ -39,7 +39,7 @@ export class CriarTopicoComponent implements OnInit {
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   readonly linguagens = signal<string[]>([]);
-  readonly todasLinguagens: string[] = ['Java', 'Python', 'HTML', 'CSS', 'JavaScript', 'C#', 'C++', 'Ruby'];
+  readonly todasLinguagens: string[] = ['Front-End', 'Back-End', 'Segurança da informação', 'Banco de dados', 'Arquitetura', 'Cloud','Java', 'Python', 'HTML', 'CSS', 'JavaScript', 'C#', 'C++', 'Ruby'];
   readonly linguagensFiltradas = computed(() => {
     const input = this.topicoForm.get('linguagensInput')?.value?.toLowerCase() || '';
     return input ? this.todasLinguagens.filter(lang => lang.toLowerCase().includes(input)) : this.todasLinguagens.slice();

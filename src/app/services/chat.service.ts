@@ -15,12 +15,13 @@ export class ChatService {
   private apiUrl = 'http://localhost:3000/api/'
 
   getOrCreateChat(mentorId: string, alunoId: string, topicoId: string): Observable<TopicoChat> {
-    return this.http.get<TopicoChat>(`${this.apiUrl}chat/messages/${topicoId}`).pipe(
-      catchError(() => {
-        return this.http.post<TopicoChat>(`${this.apiUrl}chat/create`, { mentorId, alunoId, topicoId });
-      })
-    );
+        return this.http.get<TopicoChat>(`${this.apiUrl}chat/mensagens/${topicoId}`).pipe(
+    catchError(() => {
+      return this.http.post<TopicoChat>(`${this.apiUrl}chat/create`, { mentorId, alunoId, topicoId });
+    })
+  );
   }
+
 
   createChat(mentorId: number, alunoId: number, topicoId: number): Observable<TopicoChat> {
     return this.http.post<TopicoChat>(`${this.apiUrl}chat/create`, { mentorId, alunoId, topicoId });
