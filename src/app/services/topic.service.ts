@@ -36,6 +36,11 @@ export class TopicoService {
     return this.http.get<Mensagem[]>(`http://localhost:3000/api/chat/mensagens/${topicId}`);
   }
 
+  getTopicoConcluidoPorId(topicId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/completed/${topicId}`);
+  }
+
+
 
 
   

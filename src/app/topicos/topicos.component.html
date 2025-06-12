@@ -30,15 +30,15 @@
     </button>
     <button
       class="btn-atender"
-      *ngIf="isMentor && somenteAtivos"
+      *ngIf="!isMentor && !somenteAtivos"
       (click)="abrirChat(topico)">
-      Visualizar respostas
+      Visualizar resposta
     </button>
     <button
       class="btn-atender"
-      *ngIf="!isMentor"
-      (click)="abrirChat(topico)">
-      Visualizar respostas
+      *ngIf="somenteAtivos"
+      (click)="abrirChatConcluido(topico)">
+      Visualizar resposta
     </button>
   </div>
 

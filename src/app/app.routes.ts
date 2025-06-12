@@ -11,6 +11,7 @@ import { AuthGuard } from './auth.guard';
 import { AlreadyAuthGuard } from './already-auth.guard';
 import { EntreEmContatoComponent } from './entre-em-contato/entre-em-contato.component';
 import { ChatComponent } from './chat/chat.component';
+import { ChatConcluidoComponent } from './chat-concluido/chat-concluido.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -24,4 +25,6 @@ export const routes: Routes = [
   { path: 'topicos-concluidos', component: TopicosConcluidosComponent, canActivate: [AuthGuard] },
   { path: 'entre-em-contato', component: EntreEmContatoComponent, canActivate: [AuthGuard] },
   { path: 'chat/:id', component: ChatComponent, canActivate: [AuthGuard] },
+  { path: 'chat-concluido/:id', component: ChatConcluidoComponent },
+
 ];

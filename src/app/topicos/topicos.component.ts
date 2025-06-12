@@ -186,4 +186,25 @@ export class TopicosComponent implements OnInit {
 
     return mensagens.some((msg: any) => msg.senderType === 'mentor');
   }
+   abrirChatConcluido(topico: any) {
+    const alunoId = topico.studentId;
+    const mentorId = this.isMentor ? this.user.id : topico.mentorId;
+
+    if (!alunoId || !mentorId) {
+      this.snackBar.open('Dados insuficientes para abrir o chat', 'Fechar', { duration: 3000 });
+      return;
+    }
+    this.chatService.getOrCreateChat(
+      mentorId!.toString(),
+      alunoId!.toString(),
+      topico.id!.toString()
+    ).subscribe({
+      next: (chat) => {
+        this.router.navigate(['/chat-concluido', chat.id]);
+      },
+      error: () => {
+        this.snackBar.open('Erro ao abrir o chat', 'Fechar', { duration: 3000 });
+      }
+    })
+  }
 }

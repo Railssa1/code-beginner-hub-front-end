@@ -1,0 +1,30 @@
+<div class="chat-page"> 
+  <div class="chat-conversa">
+    <div class="chat-header">
+        <h3 *ngIf="nomeAluno">
+            Aluno(a): {{ nomeAluno.split(' ')[0] }}
+        </h3>
+        <h3 *ngIf="nomeMentor">
+           Mentor(a): {{ nomeMentor.split(' ')[0] }}
+        </h3>
+    </div>
+
+    <div class="mensagem-topico-concluido">
+      Este chat foi concluído. Visualização somente leitura.
+    </div>
+
+    <div class="chat-mensagens">
+      <div
+        *ngFor="let msg of mensagens"
+        [class.me]="msg.senderType === 'mentor'"
+        class="mensagem"
+      >
+        <div class="mensagem-info" [ngClass]="{'mentor-info': msg.senderType === 'mentor', 'student-info': msg.senderType === 'student'}">
+            <strong>{{ msg.senderName.trim() }}</strong>&nbsp;
+            <span class="hora">{{ formatHora(msg.createdAt) }}</span>
+        </div>
+        <div class="mensagem-texto">{{ msg.message }}</div>
+      </div>
+    </div>
+  </div>
+</div>
