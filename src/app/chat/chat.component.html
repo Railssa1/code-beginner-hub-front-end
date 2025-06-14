@@ -2,7 +2,7 @@
   <div class="chat-conversa">
     <div class="chat-header">
       <h3>{{ meuEmail }} <span class="versus">-</span> {{ nomeOutroUsuario }}</h3>
-      <button class="btn-padrao" (click)="concluirTopico()" [disabled]="topicoConcluido" *ngIf="!topicoConcluido && !isMentor">
+      <button class="btn-padrao" (click)="openModal()" *ngIf="!topicoConcluido" [disabled]="topicoConcluido">
         Concluir chat
       </button>
     </div>

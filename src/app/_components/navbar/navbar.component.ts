@@ -2,6 +2,7 @@ import { SearchService } from './../../services/search.service';
 import { NgIf, NgStyle } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { AuthGuard } from '../../auth.guard';
 
 
 @Component({
@@ -12,13 +13,16 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent implements OnInit {
-  constructor(private searchService: SearchService) {}
+  constructor(
+    private searchService: SearchService,
+    private authGuard: AuthGuard
+  ) { }
 
   ngOnInit(): void {
     this.getActualRoute();
   }
 
-  getActualRoute(): string{
+  getActualRoute(): string {
     const baseUrl = window.location.href
     const endpoint = baseUrl.split('4200')[1]
     return endpoint
@@ -27,5 +31,9 @@ export class NavbarComponent implements OnInit {
   onSearchChange(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.searchService.setSearchTerm(value);
+  }
+
+  logout(): void {
+    this.authGuard.logout();
   }
 }

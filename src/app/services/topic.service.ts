@@ -39,9 +39,4 @@ export class TopicoService {
   getTopicoConcluidoPorId(topicId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/completed/${topicId}`);
   }
-
-
-
-
-  
 }

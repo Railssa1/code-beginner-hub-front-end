@@ -49,8 +49,7 @@ export class PerfilUsuarioComponent implements OnInit {
   constructor(
     private userService: UserService,
     private snackBar: MatSnackBar,
-    private fb: FormBuilder,
-    private authGuard: AuthGuard
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -170,9 +169,5 @@ export class PerfilUsuarioComponent implements OnInit {
         });
       }
     );
-  }
-
-  logout(): void {
-    this.authGuard.logout();
   }
 }

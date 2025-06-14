@@ -8,6 +8,7 @@ import { Topic } from '../interfaces/topico.model';
 import { UserEstudante, UserMentor } from '../interfaces/user.model';
 import { UserService } from '../services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { publish } from 'rxjs';
 
 @Component({
   selector: 'app-topicos',
@@ -74,14 +75,23 @@ export class TopicosComponent implements OnInit {
 
         } else {
           const estudante = this.user as UserEstudante;
-          filtrados = data.filter(topico => topico.studentId === estudante.id);
+          filtrados = data.filter(topico =>
+            topico.studentId === estudante.id || (topico.completed && topico.isPublish)
+          );
         }
 
-        if (!this.somenteAtivos) {
-          this.topicos = filtrados.filter(t => !t.completed);
-        } else {
-          this.topicos = filtrados.filter(t => t.completed);
-        }
+        this.topicos = filtrados.filter(t => {
+          const isDono = !this.isMentor && t.studentId === this.user.id;
+
+          if (!this.somenteAtivos) {
+            if (isDono) return !t.completed;
+            return false;
+          }
+
+          if (isDono) return t.completed;
+
+          return t.completed && t.isPublish;
+        });
 
       },
       error: (err) => {
@@ -90,7 +100,6 @@ export class TopicosComponent implements OnInit {
       }
     });
   }
-
 
   get paginatedTopicos(): Topic[] {
     let filtrados = this.topicos;
@@ -186,7 +195,7 @@ export class TopicosComponent implements OnInit {
 
     return mensagens.some((msg: any) => msg.senderType === 'mentor');
   }
-   abrirChatConcluido(topico: any) {
+  abrirChatConcluido(topico: any) {
     const alunoId = topico.studentId;
     const mentorId = this.isMentor ? this.user.id : topico.mentorId;
 

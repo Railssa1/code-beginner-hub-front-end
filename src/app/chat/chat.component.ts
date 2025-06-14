@@ -1,5 +1,5 @@
 import { NgFor, CommonModule, NgIf } from "@angular/common";
-import { Component, OnInit, OnDestroy, AfterViewChecked, ViewChild, ElementRef, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, OnDestroy, AfterViewChecked, ViewChild, ElementRef, ChangeDetectorRef, viewChild } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { WebSocketService } from "../services/web-socket.service";
@@ -7,8 +7,9 @@ import { TopicoService } from "../services/topic.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { UserEstudante, UserMentor } from '../interfaces/user.model';
 import { UserService } from '../services/user.service';
-
-
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { ModaConfirmacaoComponent } from "../_components/moda-confirmacao/moda-confirmacao.component";
+import { MatButtonModule } from "@angular/material/button";
 
 export interface Mensagem {
   author: string;
@@ -24,7 +25,14 @@ export interface Mensagem {
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
   standalone: true,
-  imports: [NgFor, FormsModule, CommonModule, NgIf],
+  imports: [
+    NgFor,
+    FormsModule,
+    CommonModule,
+    NgIf,
+    MatDialogModule,
+    MatButtonModule
+  ],
   providers: [WebSocketService]
 })
 export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
@@ -51,6 +59,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     private router: Router,
     private snackBar: MatSnackBar,
     private userService: UserService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -58,16 +67,16 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.verificarStatusTopico();
     this.conectarWebSocket();
 
-      this.userService.getUserByEmail(this.email).subscribe(
-    (data: UserMentor | UserEstudante) => {
-      this.user = data;
-      this.isMentor = this.userService.isMentor(this.user);
-      this.souEstudante = !this.isMentor; // define quem é o usuário
-    },
-    () => {
-      this.snackBar.open('Erro ao buscar dados do usuário', 'Fechar', { duration: 3000 });
-    }
-  );
+    this.userService.getUserByEmail(this.email).subscribe(
+      (data: UserMentor | UserEstudante) => {
+        this.user = data;
+        this.isMentor = this.userService.isMentor(this.user);
+        this.souEstudante = !this.isMentor; // define quem é o usuário
+      },
+      () => {
+        this.snackBar.open('Erro ao buscar dados do usuário', 'Fechar', { duration: 3000 });
+      }
+    );
 
   }
 
@@ -184,11 +193,12 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
-  public concluirTopico() {
+  public concluirTopico(isPublish: boolean) {
     this.topicoService.updateTopico(this.topicoId, {
       completed: true,
       inProgress: false,
-      chatConcluded: true
+      chatConcluded: true,
+      isPublish: isPublish ? isPublish : false
     }).subscribe({
       next: () => {
         this.snackBar.open('Tópico concluído com sucesso!', 'Fechar', { duration: 3000 });
@@ -203,5 +213,15 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   ngOnDestroy() {
     this.wsService.close();
+  }
+
+  openModal() {
+    const dialogRef = this.dialog.open(ModaConfirmacaoComponent, {
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe((resposta: boolean) => {
+      this.concluirTopico(resposta);
+    });
   }
 }

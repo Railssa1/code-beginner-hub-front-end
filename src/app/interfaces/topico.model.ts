@@ -12,6 +12,7 @@ export interface Topic {
   chatReadByMentor?: boolean;
   chatReadByStudent?: boolean;
   chatConcluded?: boolean;
+  isPublish?: boolean;
 }
 
 export interface TopicoChat {
