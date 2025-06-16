@@ -80,18 +80,11 @@ export class TopicosComponent implements OnInit {
           );
         }
 
-        this.topicos = filtrados.filter(t => {
-          const isDono = !this.isMentor && t.studentId === this.user.id;
-
-          if (!this.somenteAtivos) {
-            if (isDono) return !t.completed;
-            return false;
-          }
-
-          if (isDono) return t.completed;
-
-          return t.completed && t.isPublish;
-        });
+        if (!this.somenteAtivos) {
+          this.topicos = filtrados.filter(t => !t.completed);
+        } else {
+          this.topicos = filtrados.filter(t => t.completed);
+        }
 
       },
       error: (err) => {

@@ -1,12 +1,12 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatButton, MatButtonModule } from '@angular/material/button';
-import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-moda-confirmacao',
   templateUrl: './moda-confirmacao.component.html',
   styleUrls: ['./moda-confirmacao.component.css'],
-  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule]
+  imports: [MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule]
 })
 export class ModaConfirmacaoComponent {
   constructor(private dialogRef: MatDialogRef<ModaConfirmacaoComponent>) {
