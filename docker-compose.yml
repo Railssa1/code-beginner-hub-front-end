@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   backend:
-    image: adrilucy/codebeginnerhub:back_sprint04
-    container_name: backend_codebeginnerhub_sprint04
+    image: adrilucy/codebeginnerhub:back
+    container_name: backend_codebeginnerhub
     ports:
       - "3001:3000"
     depends_on:
@@ -14,7 +14,7 @@ services:
 
   mysql:
     image: mysql:8
-    container_name: mysql_codebeginnerhub_sprint04
+    container_name: mysql_codebeginnerhub
     environment:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_DATABASE: CodeBeginnerHub
@@ -24,8 +24,8 @@ services:
       - mysql_data:/var/lib/mysql
 
   frontend:
-    image: adrilucy/codebeginnerhub:front_sprint04
-    container_name: frontend_codebeginnerhub_sprint04
+    image: adrilucy/codebeginnerhub:front
+    container_name: frontend_codebeginnerhub
     depends_on:
       - backend
     ports:
